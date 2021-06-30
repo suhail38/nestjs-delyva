@@ -1,6 +1,6 @@
 {
   "name": "nestjs-delyva",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "NestJS api wrapper for Delyva",
   "author": "Suhail <suhailh3888@gmail.com>",
   "license": "MIT",

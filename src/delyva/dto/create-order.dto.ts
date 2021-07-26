@@ -13,6 +13,7 @@ export class CreateOrderDto {
   serviceCode: string;
   waypoint: Waypoint[];
   // optional data
+  customerId?: number;
   paymentMethodId?: number;
   process?: boolean;
   poll?: boolean;

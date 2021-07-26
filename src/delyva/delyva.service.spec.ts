@@ -19,7 +19,6 @@ describe('Delyva Service', () => {
             apiKey: APIKEY,
             companyId: COMPANYID,
             customerId: CUSTOMERID,
-            demo: true,
           }),
         },
       ],

@@ -14,6 +14,5 @@ export interface DelyvaOptions {
   apiKey: string;
   companyId: string;
   customerId: string;
-  demo: boolean;
   logger?: LoggerService;
 }

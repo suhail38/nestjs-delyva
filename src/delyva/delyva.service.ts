@@ -6,12 +6,15 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { ConsignmentNoDto } from './dto/consignment-no.dto';
 import { PriceQuoteDto } from './dto/price-quote.dto';
 import { InvoiceIdDto } from './dto/invoiceId.dto';
+import {
+  SubscribeWebhookDto,
+  UpdateWebhookDto,
+} from './dto/subscribe-webhook.dto';
 
 @Injectable()
 export class DelyvaService {
   // Api endpoint
   private readonly baseUrl = 'https://api.delyva.app/v1.0/';
-  private demo: boolean;
   private apiKey: string;
   private companyId: string;
   private customerId: string;
@@ -21,7 +24,6 @@ export class DelyvaService {
     private readonly httpService: HttpService,
     @Inject(CONFIG_OPTIONS) options: DelyvaOptions,
   ) {
-    this.demo = options.demo || false;
     this.apiKey = options.apiKey;
     this.companyId = options.companyId;
     this.customerId = options.customerId;
@@ -55,7 +57,7 @@ export class DelyvaService {
     }
 
     if (httpMethod === HttpMethod.DELETE) {
-      return (data = {}, options = {}) => {
+      return (options = {}) => {
         return this.httpService
           .delete(url, { ...options, headers })
           .toPromise()
@@ -97,12 +99,14 @@ export class DelyvaService {
 
   async priceQuote(data: PriceQuoteDto) {
     const api = this.getApiCaller(HttpMethod.POST, 'service/instantQuote');
-    return await api(data);
+    const req_data = { customerId: this.customerId, ...data };
+    return await api(req_data);
   }
 
   async createOrder(data: CreateOrderDto) {
     const api = this.getApiCaller(HttpMethod.POST, 'order');
-    return await api(data);
+    const req_data = { customerId: this.customerId, ...data };
+    return await api(req_data);
   }
 
   async confirmOrder(data: ConfirmOrderDto) {
@@ -171,22 +175,22 @@ export class DelyvaService {
     return await api();
   }
 
-  async subscribeWebhook() {
-    const dataObj = {
-      event: 'order_tracking.update',
-      url: 'https://staging-api.delyva.app/webhook/test',
-    };
+  async subscribeWebhook(data: SubscribeWebhookDto) {
     const api = this.getApiCaller(HttpMethod.POST, 'webhook');
-    return await api(dataObj);
+    return await api(data);
   }
 
-  async getWebhook() {
+  async updateWebhook(data: UpdateWebhookDto) {
+    const api = this.getApiCaller(
+      HttpMethod.PATCH,
+      `webhook/${data.webhookId}`,
+    );
+    delete data.webhookId;
+    return await api(data);
+  }
+
+  async getListofWebhook() {
     const api = this.getApiCaller(HttpMethod.GET, 'webhook');
-    return await api();
-  }
-
-  async getSpecificSubcription() {
-    const api = this.getApiCaller(HttpMethod.GET, 'webhook/1?retrieve=queue');
     return await api();
   }
 

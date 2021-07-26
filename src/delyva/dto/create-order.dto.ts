@@ -10,7 +10,6 @@ interface Waypoint {
 }
 
 export class CreateOrderDto {
-  customerId: number;
   serviceCode: string;
   waypoint: Waypoint[];
   // optional data
